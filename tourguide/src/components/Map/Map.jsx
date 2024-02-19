@@ -6,9 +6,9 @@ import Rating from "@material-ui/lab/Rating"; // Correct import path
 
 import useStyles from "./styles";
 
-const Map = ({ setCoordinates, coordinates, setBound }) => {
+const Map = ({ setCoordinates, coordinates, setBound, places }) => {
   const classes = useStyles();
-  const isMobile = useMediaQuery("(min-width:600px)");
+  const isDekstop = useMediaQuery("(min-width:600px)");
 
   return (
     <div className={classes.mapContainer}>
@@ -19,14 +19,45 @@ const Map = ({ setCoordinates, coordinates, setBound }) => {
         defaultZoom={14}
         margin={[50, 50, 50, 50]}
         options={""}
-        onChange={(e) =>{
+        onChange={(e) => {
           // console.log(e)
-          setCoordinates({ lat: e.center.lat, lng: e.center.lng })
-          setBound({ne:e.marginBounds.ne,sw:e.marginBounds.sw})
+          setCoordinates({ lat: e.center.lat, lng: e.center.lng });
+          setBound({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
         }}
-        onChildClick={''}
+        onChildClick={""}
       >
         {/* Add your map markers or other components here */}
+        {places?.map((place, i) => (
+          <div
+            className={classes.markerContainer}
+            lat={+place.latitude}
+            lng={+place.longitude}
+            key={i}
+          >
+            {!isDekstop ? (
+              <LocationOnOutlinedIcon color="primary" fontSize="large" />
+            ) : (
+              <Paper elevation={3} className={classes.paper}>
+                <Typography
+                  className={classes.typography}
+                  variant="subtitle2"
+                  gutterBottom
+                >
+                  {place.name}
+                </Typography>
+                <img
+                  className={classes.pointer}
+                  src={
+                    place.photo
+                      ? place.photo.images.large.url
+                      : "https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8cmVzdGF1cmFudHxlbnwwfHwwfHx8MA%3D%3D"
+                  }
+                  alt={place?.name}
+                />
+              </Paper>
+            )}
+          </div>
+        ))}
       </GoogleMapReact>
     </div>
   );

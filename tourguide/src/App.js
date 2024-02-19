@@ -8,18 +8,19 @@ import { useEffect, useState } from "react";
 const App = () => {
   const [places, setPlaces] = useState([]);
   const [coordinates, setCoordinates] = useState({});
-  const [bound, setBound] = useState(null);
+  const [bound, setBound] = useState({});
 
-  useEffect(()=>{
-    navigator.geolocation.getCurrentPosition(({coords:{latitude,longitude}})=>{
-      setCoordinates({lat:latitude,lng:longitude})
-    })
-  },[])
-
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      ({ coords: { latitude, longitude } }) => {
+        setCoordinates({ lat: latitude, lng: longitude });
+      }
+    );
+  }, []);
 
   useEffect(() => {
     console.log(coordinates, bound, "coordinates and bounds");
-    getPlacesData().then((data) => setPlaces(data));
+    getPlacesData(bound?.sw, bound?.ne).then((data) => setPlaces(data));
   }, [coordinates, bound]);
 
   console.log(places);
@@ -30,13 +31,14 @@ const App = () => {
       <Header />
       <Grid container spacing={3} style={{ width: "100%" }}>
         <Grid item xs={12} md={4}>
-          <List />
+          <List places={places} />
         </Grid>
         <Grid item xs={12} md={8}>
           <Map
             setCoordinates={setCoordinates}
             setBound={setBound}
             coordinates={coordinates}
+            places={places}
           />
         </Grid>
       </Grid>
