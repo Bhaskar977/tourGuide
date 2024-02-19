@@ -54,6 +54,7 @@ const Map = ({ setCoordinates, coordinates, setBound, places }) => {
                   }
                   alt={place?.name}
                 />
+                <Rating size="small" value={Number(place.rating)} readOnly/>
               </Paper>
             )}
           </div>
