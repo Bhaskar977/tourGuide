@@ -6,7 +6,7 @@ import Rating from "@material-ui/lab/Rating"; // Correct import path
 
 import useStyles from "./styles";
 
-const Map = ({ setCoordinates, coordinates, setBound, places }) => {
+const Map = ({ setCoordinates, coordinates, setBound, places ,setChildClicked }) => {
   const classes = useStyles();
   const isDekstop = useMediaQuery("(min-width:600px)");
 
@@ -24,7 +24,9 @@ const Map = ({ setCoordinates, coordinates, setBound, places }) => {
           setCoordinates({ lat: e.center.lat, lng: e.center.lng });
           setBound({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
         }}
-        onChildClick={""}
+        onChildClick={(child)=>{
+          setChildClicked(child)
+        }}
       >
         {/* Add your map markers or other components here */}
         {places?.map((place, i) => (
